@@ -276,5 +276,22 @@ def main( config ):
 
 
 # This is the main function, which runs the miner.
+# ... (rest of the code)
+
 if __name__ == "__main__":
-    main( get_config() )
+    world_size = 16  # Total number of processes
+    base_port = 8091  # Starting port for the first miner instance
+    processes = []
+
+    for rank in range(world_size):
+        # Calculate a unique port for this miner instance
+        unique_port = base_port + rank
+
+        # Create a new process targeting the start_distributed_miner function
+        p = mp.Process(target=start_distributed_miner, args=(rank, world_size, unique_port))
+        p.start()
+        processes.append(p)
+
+    for p in processes:
+        p.join()  # Wait for all processes to complete
+
