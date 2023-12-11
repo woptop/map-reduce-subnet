@@ -288,7 +288,8 @@ if __name__ == "__main__":
         unique_port = base_port + rank
 
         # Create a new process targeting the start_distributed_miner function
-        p = mp.Process(target=start_miner_dist_process, args=(rank, world_size, unique_port))
+        p = mp.Process(target=start_miner_dist_process, args=(rank, worker_url, unique_port, wallet, job, axon_port))
+
 
         p.start()
         processes.append(p)
