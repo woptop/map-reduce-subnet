@@ -237,8 +237,17 @@ class MinerDist:
                 break
             bt.logging.success(f"✅ Action: {action['type']} completed")
                 
-def start_miner_dist_process(queue: mp.Queue, external_ip: str, opened_ports: str, wallet: bt.wallet, job: mapreduce.protocol.Job):
-    bt.logging.trace(job)
+# This function is modified to accept an additional `axon_port` parameter
+def start_miner_dist_process(queue: mp.Queue, external_ip: str, opened_ports: str, wallet: bt.wallet, job: mapreduce.protocol.Job, axon_port: int):
+    # Create a new instance of MinerDist with the given IP address and opened ports
     miner_dist = MinerDist(external_ip, opened_ports)
+    
+    # Set the axon port in the environment or pass it to where it needs to be used
+    os.environ['AXON_PORT'] = str(axon_port)
+    
+    # Initialize the process group for the miner using the job details
     miner_dist.initialize_process_group(job)
+    
+    # ... rest of the function remains the same
+
     
